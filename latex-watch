@@ -1,0 +1,27 @@
+#! /usr/bin/env ruby
+
+require 'listen'
+require 'fileutils'
+
+PROJECT_DIR = Dir.pwd
+TEMP_DIR    = File.join(PROJECT_DIR, ".latex")
+CACHE_DIR   = File.join(TEMP_DIR, "cache")
+
+def compile
+  Dir.glob("#{PROJECT_DIR}/*.tex").each do |f|
+    name = File.basename(f, ".tex")
+    puts "#{name.upcase}:"
+    system("rubber --pdf --into #{CACHE_DIR} #{f}")
+    FileUtils.mv("#{CACHE_DIR}/#{name}.pdf", PROJECT_DIR) if $?.success?
+  end
+end
+
+puts "Watching #{PROJECT_DIR}..."
+FileUtils.mkdir_p(CACHE_DIR) unless File.exists?(CACHE_DIR)
+compile
+system("mupdf #{PROJECT_DIR}/*.pdf &")
+Listen.to(PROJECT_DIR, :filter => /\.tex$/, :ignore => /^\.latex\//) do |f|
+  compile
+  system("xdotool search --class mupdf key --window %@ r")
+end
+

@@ -17,9 +17,15 @@ def compile
 end
 
 puts "Watching #{PROJECT_DIR}..."
+if Dir.glob("#{PROJECT_DIR}/*.tex").empty?
+  puts "No .tex files found!"
+  exit
+end
 FileUtils.mkdir_p(CACHE_DIR) unless File.exists?(CACHE_DIR)
 compile
-system("mupdf #{PROJECT_DIR}/*.pdf &")
+Dir.glob("#{PROJECT_DIR}/*.tex").each {|f| system("mupdf #{PROJECT_DIR}/#{File.basename(f, ".tex")}.pdf &") }
+
+
 Listen.to(PROJECT_DIR, :filter => /\.tex$/, :ignore => /^\.latex\//) do |f|
   compile
   system("xdotool search --class mupdf key --window %@ r")

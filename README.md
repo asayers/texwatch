@@ -1,5 +1,5 @@
-Latex Watcher
-=============
+Texwatch
+========
 
 [Rubber](https://launchpad.net/rubber) is a great tool for compiling complex latex documents. This script wraps the wrapper to provide the following nifty features:
 

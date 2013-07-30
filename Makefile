@@ -1,5 +1,5 @@
 watch:
-	inotifywait -m -e close_write . | while read dir event file; do\
+	inotifywait -mr -e close_write . | while read dir event file; do\
 		if [ "$${file##*.}" == "tex" ]; then\
 			make "$$dir$${file%.*}.pdf";\
 		fi;\

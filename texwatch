@@ -7,6 +7,9 @@
 # 
 # Bugs: Quitting mupdf while texwatch is running sometimes causes vim to
 #       terminate!
+#
+# TODO: Consider switching from xdotool to https://github.com/baskerville/xdo:
+# `xdo key -N mupdf -k [something]`
 
 require 'listen'
 require 'fileutils'
